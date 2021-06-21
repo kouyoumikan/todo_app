@@ -1,35 +1,30 @@
 import 'package:flutter/material.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 void main() {
-  runApp(MyApp());
+  runApp(
+    FireStoreApp()
+  );
 }
 
-class MyApp extends StatelessWidget {
+class FireStoreApp extends StatefulWidget {
+  @override
+  _FireStoreAppState createState() => _FireStoreAppState();
+}
 
+class _FireStoreAppState extends State<FireStoreApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'TODOアプリ',
       home: Scaffold(
         appBar: AppBar(
-          title: Text('TODOアプリ'),
+          title: Text('Firestore Exsample'),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'You have pushed the button this many times:',
-              ),
-            ],
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          tooltip: 'Increment',
-          child: Icon(Icons.add),
-        ),
+        body: Text('参考URL: https://youtu.be/WuYOGBEOEOo'),
       ),
     );
   }
 }
+
