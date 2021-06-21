@@ -45,11 +45,18 @@ class _FireStoreAppState extends State<FireStoreApp> {
             // アルファベット順にgroceriesのsnapshotsを作成
             stream: groceries.orderBy('name').snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              // 値がnullでエラー発生時、Loadingテキスト表示 (snapshot.data! の初期値はnullのため)
+              if(!snapshot.hasData){
+                return Center(child: Text('Loading'));
+              }
               return ListView(
                 children: snapshot.data!.docs.map((grocery) {
                   return Center(
                     child: ListTile(
                       title: Text(grocery['name']), // document内のnameの値を表示
+                      onLongPress: () {
+                        grocery.reference.delete(); // document内のnameの値を削除する
+                      }, // リストタイルの長押し
                     ),
                   );
                 }).toList(),
