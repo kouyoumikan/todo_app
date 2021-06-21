@@ -42,7 +42,8 @@ class _FireStoreAppState extends State<FireStoreApp> {
 //            stream: FirebaseFirestore.instance
 //              .collection('groceries') // firebaseのドキュメント名
 //              .snapshots(),
-            stream: groceries.snapshots(), // groceriesのsnapshotsを作成
+            // アルファベット順にgroceriesのsnapshotsを作成
+            stream: groceries.orderBy('name').snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               return ListView(
                 children: snapshot.data!.docs.map((grocery) {
@@ -62,6 +63,7 @@ class _FireStoreAppState extends State<FireStoreApp> {
             groceries.add({
               'name': textController.text,
             });
+            textController.clear(); // テキストフィールド内をクリアする
           },
         ),
       ),
