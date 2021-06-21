@@ -21,20 +21,28 @@ class FireStoreApp extends StatefulWidget {
 }
 
 class _FireStoreAppState extends State<FireStoreApp> {
-  
+  // テキストフィールドの値をfirestoreで保存できるように設定
+  final textController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    // firestore内のgroceriesドキュメントのコレクションを参照する設定
+    CollectionReference groceries = FirebaseFirestore.instance.collection('groceries');
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: TextField(),
+          title: TextField(
+            controller: textController, // テキストフィールドの値をfirestoreで保存
+          ),
         ),
         //body: Text('参考URL: https://youtu.be/WuYOGBEOEOo'),
         body: Center(
           child: StreamBuilder( // firebaseの内容
-            stream: FirebaseFirestore.instance
-              .collection('groceries') // firebaseのドキュメント名
-              .snapshots(),
+//            stream: FirebaseFirestore.instance
+//              .collection('groceries') // firebaseのドキュメント名
+//              .snapshots(),
+            stream: groceries.snapshots(), // groceriesのsnapshotsを作成
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               return ListView(
                 children: snapshot.data!.docs.map((grocery) {
@@ -47,9 +55,14 @@ class _FireStoreAppState extends State<FireStoreApp> {
               );
             }),
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: FloatingActionButton( // 保存ボタンの作成
           child: Icon(Icons.save),
-          onPressed: () {},
+          onPressed: () {
+            // ボタン押下後、テキストフィールドの値をgroceriesドキュメント内のnameコレクションに保存する
+            groceries.add({
+              'name': textController.text,
+            });
+          },
         ),
       ),
     );
